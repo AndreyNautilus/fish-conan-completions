@@ -28,4 +28,4 @@ jobs:
           python3 -B generate_fish_conan_completions.py > completions/conan.fish
       - name: Validate no changes
         run: |
-          exit (git diff --name-only | wc -l)
+          exit $(git diff --name-only | wc -l)
