@@ -1,0 +1,31 @@
+name: Verify completions
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  completions-up-to-date:
+    runs-on: ubuntu-latest
+    env:
+      CONAN_VERSION: '1.53.0'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install conan ${{ env.CONAN_VERSION }}
+        run: |
+          python3 -m pip install conan==${{ env.CONAN_VERSION }}
+      - name: Re-generation completions file
+        run: |
+          python3 -B generate_fish_conan_completions.py > completions/conan.fish
+      - name: Validate no changes
+        run: |
+          exit (git diff --name-only | wc -l)
