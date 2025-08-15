@@ -14,10 +14,12 @@ $ ln -s ../fish-conan-completions/completions/conan.fish completions/
 ## Build
 
 Requirements:
+
 - `python3`
 - `conan`
 
 To rebuild the completion file, run:
+
 ```bash
 $ python -B generate_fish_conan_completions.py > completions/conan.fish
 ```

@@ -22,6 +22,7 @@ end
 # conan options
 complete -c conan -f -n '__fish_conan_no_subcommand' -s v -l version -d 'Print version information'
 
+
 # conan install
 complete -c conan -f -n '__fish_conan_no_subcommand' -a install -d "Installs the requirements specified in a recipe (conanfile.py or conanfile.txt)."
 complete -c conan -A -n '__fish_seen_subcommand_from install' -o pr -l profile -x -a '(__fish_print_conan_profiles)' -d 'use profile'
@@ -114,4 +115,3 @@ complete -c conan -f -n '__fish_conan_no_subcommand' -a lock -d "Generates and m
 
 # conan frogarian
 complete -c conan -f -n '__fish_conan_no_subcommand' -a frogarian -d "Conan The Frogarian"
-
