@@ -26,52 +26,89 @@ end
 complete -c conan -f -n '__fish_conan_no_subcommand' -s v -l version -d 'Print version information'
 """
 
-subcommand_template =  """complete -c conan -f -n '__fish_conan_no_subcommand' -a {command} -d "{description}" """
+subcommand_template =  "complete -c conan -f -n '__fish_conan_no_subcommand' -a {command} -d \"{description}\""
 profile_usage_template = "complete -c conan -A -n '__fish_seen_subcommand_from {command}' -o pr -l profile -x -a '(__fish_print_conan_profiles)' -d 'use profile'"
 build_usage_template =   "complete -c conan -A -f -n '__fish_seen_subcommand_from {command}' -s b -l build -a 'never missing outdated' -d 'build from sources'"
 
+
 def process_output(cmd):
+    """ Run the command and provide its output as list of strings """
     ps = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out, _ = ps.communicate()
     out = out.decode('utf-8')
-    return iter(out.splitlines())
+    return list(out.splitlines())
 
-def conan_subcommands():
-    for line in process_output('conan'):
+
+def parse_conan_subcommands(conan_output):
+    """ Parse conan output and fetch first level subcommands with descriptions"""
+    result = []
+
+    command = ''
+    description = ''
+    for line in conan_output:
         if not line:
-            continue
+            continue  # skip empty lines
         if line.endswith(' commands'):
-            continue
+            continue  # skip section titles
         if 'Type "conan <command> -h" for help' in line:
-            continue
-        yield line.strip().split(None, 1)
+            continue  # skip help message
 
-def conan_subcommand_usage(cmd):
+        [cmd, desc] = line.strip().split(maxsplit=1)
+        cmd_position = line.find(cmd)
+        if cmd_position == -1 or cmd_position > 5:
+            # this line is a continuation of the previous command description
+            description += ' ' + line.strip()
+            continue
+
+        if command:
+            result.append((command, description))
+
+        command = cmd
+        description = desc
+
+    if command:
+        result.append((command, description))
+
+    return result
+
+
+def conan_subcommand_help(cmd):
+    """ Usage/help message for a subcommand """
     lines = []
     for line in process_output(['conan', cmd, '-h']):
-        if line.startswith('usage: conan {}'.format(cmd)):
-            lines.append(line[len('usage: conan {}'.format(cmd)):])
+        if line.startswith(f'usage: conan {cmd}'):
+            lines.append(line[len(f'usage: conan {cmd}'):])
         elif not line:
             break;
         else:
             lines.append(line)
     return ' '.join(l.strip() for l in lines)
 
-def print_subcommand(cmd, desc):
-    print('# conan {command}'.format(command=cmd))
-    print(subcommand_template.format(command=cmd, description=desc))
-    usage = conan_subcommand_usage(cmd)
-    if '[-pr PROFILE]' in usage:
-        print(profile_usage_template.format(command=cmd))
-    if '[-b [BUILD]]' in usage:
-        print(build_usage_template.format(command=cmd))
-    print
+
+def print_subcommand_completion(subcommand, desc, help_text):
+    """ Print completion config for subcommand """
+    print(f'# conan {subcommand}')
+    print(subcommand_template.format(command=subcommand, description=desc))
+
+    PROFILE_OPTIONS = ('[-pr PROFILE]', '[-pr PROFILE_HOST]')
+    if any(patten in help_text for patten in PROFILE_OPTIONS):
+        print(profile_usage_template.format(command=subcommand))
+
+    BUILD_OPTIONS = ('[-b [BUILD]]',)
+    if any(patten in help_text for patten in BUILD_OPTIONS):
+        print(build_usage_template.format(command=subcommand))
+
 
 def main():
-    print(header_template.format(subcommands=' '.join([x for x, _ in conan_subcommands()])))
+    """ Program entrypoint """
+    conan_output = process_output('conan')
+    conan_subcommands = parse_conan_subcommands(conan_output)
 
-    for cmd, desc in conan_subcommands():
-        print_subcommand(cmd, desc)
+    print(header_template.format(subcommands=' '.join([x for x, _ in conan_subcommands])))
+    for (subcmd, desc) in conan_subcommands:
+        usage = conan_subcommand_help(subcmd)
+        print_subcommand_completion(subcmd, desc, usage)
+        print()  # newline
 
 if __name__ == '__main__':
     main()
