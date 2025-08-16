@@ -4,11 +4,14 @@ Basic [conan](https://conan.io/) completions for [fish shell](https://fishshell.
 
 ## Installation
 
+Download `completions/conan-1.53.0.fish` file into `~/.config/fish/completions/` folder.
+
+Or clone the repo and create a symlink:
 ```bash
 $ mkdir -p ~/.config/fish/completions
 $ cd ~/.config/fish
 $ git clone https://github.com/AndreyNautilus/fish-conan-completions.git
-$ ln -s ../fish-conan-completions/completions/conan.fish completions/
+$ ln -s ../fish-conan-completions/completions/conan-1.53.0.fish completions/
 ```
 
 ## Build
@@ -16,7 +19,7 @@ $ ln -s ../fish-conan-completions/completions/conan.fish completions/
 Requirements:
 
 - `python3`
-- `conan`
+- `conan` (tested on 1.53.0 only)
 
 To rebuild the completion file, run:
 

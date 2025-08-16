@@ -5,6 +5,9 @@ on:
   push:
     branches:
       - main
+  schedule:
+    - cron: "7 10 1 * *"  # at 10:07 on the first day of every month (i.e. monthly)
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -17,6 +20,7 @@ jobs:
       CONAN_VERSION: '1.53.0'
     steps:
       - uses: actions/checkout@v5
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -25,7 +29,7 @@ jobs:
           python3 -m pip install conan==${{ env.CONAN_VERSION }}
       - name: Re-generation completions file
         run: |
-          python3 -B generate_fish_conan_completions.py > completions/conan.fish
+          python3 -B generate_fish_conan_completions.py > completions/conan-${{ env.CONAN_VERSION }}.fish
       - name: Check if up-to-date
         run: |
           exit $(git diff --name-only | wc -l)
@@ -36,5 +40,5 @@ jobs:
           sudo apt-get install fish
       - name: Check syntax of the completions file
         run: |
-          fish --no-execute completions/conan.fish
+          fish --no-execute completions/conan-${{ env.CONAN_VERSION }}.fish
 
