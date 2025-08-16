@@ -1,8 +1,8 @@
 # conan completion for fish shell
 
-[conan](https://conan.io/) completions for [fish shell](https://fishshell.com/).
+Basic [conan](https://conan.io/) completions for [fish shell](https://fishshell.com/).
 
-## Install
+## Installation
 
 ```bash
 $ mkdir -p ~/.config/fish/completions
@@ -13,7 +13,13 @@ $ ln -s ../fish-conan-completions/completions/conan.fish completions/
 
 ## Build
 
+Requirements:
+
+- `python3`
+- `conan`
+
 To rebuild the completion file, run:
+
 ```bash
 $ python -B generate_fish_conan_completions.py > completions/conan.fish
 ```
