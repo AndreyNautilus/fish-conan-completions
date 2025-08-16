@@ -7,6 +7,7 @@ Basic [conan](https://conan.io/) completions for [fish shell](https://fishshell.
 Download `completions/conan-1.53.0.fish` file into `~/.config/fish/completions/` folder.
 
 Or clone the repo and create a symlink:
+
 ```bash
 $ mkdir -p ~/.config/fish/completions
 $ cd ~/.config/fish
