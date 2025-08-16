@@ -41,4 +41,3 @@ jobs:
       - name: Check syntax of the completions file
         run: |
           fish --no-execute completions/conan-${{ env.CONAN_VERSION }}.fish
-
