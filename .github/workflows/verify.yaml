@@ -26,6 +26,15 @@ jobs:
       - name: Re-generation completions file
         run: |
           python3 -B generate_fish_conan_completions.py > completions/conan.fish
-      - name: Validate no changes
+      - name: Check if up-to-date
         run: |
           exit $(git diff --name-only | wc -l)
+
+      - name: Install fish
+        run: |
+          apt-get update
+          apt-get install fish
+      - name: Check syntax
+        run: |
+          fish --no-execute completions/conan.fish
+
