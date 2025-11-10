@@ -50,6 +50,8 @@ def parse_conan_subcommands(conan_output):
             continue  # skip empty lines
         if line.endswith(" commands"):
             continue  # skip section titles
+        if line.startswith("   "):
+            continue  # skip continuations of previous lines
         if 'Type "conan <command> -h" for help' in line:
             continue  # skip help message
 
