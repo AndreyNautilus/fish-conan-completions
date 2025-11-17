@@ -30,14 +30,14 @@ repos:
         name: Common misspellings
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.3
+    rev: v0.14.5
     hooks:
       - id: ruff  # Run the linter.
         args: [--fix]
       - id: ruff-format  # Run the formatter.
 
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 25.9.0
+    rev: 25.11.0
     hooks:
       - id: black
         # It is recommended to specify the latest version of Python
