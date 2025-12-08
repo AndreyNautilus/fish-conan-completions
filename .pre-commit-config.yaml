@@ -30,14 +30,14 @@ repos:
         name: Common misspellings
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.5
+    rev: v0.14.8
     hooks:
       - id: ruff  # Run the linter.
         args: [--fix]
       - id: ruff-format  # Run the formatter.
 
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 25.11.0
+    rev: 25.12.0
     hooks:
       - id: black
         # It is recommended to specify the latest version of Python
@@ -47,7 +47,7 @@ repos:
         language_version: python3.11
 
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.8
+    rev: v1.7.9
     hooks:
       - id: actionlint
         name: check GitHub workflow files
