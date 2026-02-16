@@ -30,7 +30,7 @@ repos:
         name: Common misspellings
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.14
+    rev: v0.15.1
     hooks:
       - id: ruff  # Run the linter.
         args: [--fix]
@@ -47,7 +47,7 @@ repos:
         language_version: python3.11
 
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.10
+    rev: v1.7.11
     hooks:
       - id: actionlint
         name: check GitHub workflow files
